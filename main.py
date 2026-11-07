@@ -38,7 +38,14 @@ def main(args):
             print("WARNING] DFS is computationally prohibitive for datasets with >= 145 elements")
 
     if args.algo == "MMAS":
-        aco = MMAS(nums=nums, num_iterations=200, num_ants=100, rho=0.1, alpha=1.0, beta=1.5)
+        aco = MMAS(
+            nums=nums, 
+            num_iterations=args.iterations, 
+            num_ants=args.ants, 
+            rho=args.rho,
+            alpha=args.alpha,
+            beta=args.beta
+        )
         best_length, best_path = aco.run()
         glued, glued_for_print = evaluate(nums, best_path)
 
@@ -51,5 +58,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Puzzle-quiz using two method (DFS and MMAS-ACO")
     parser.add_argument("--input_path", type=str, default="source.txt", help="Path to source file with puzzles (default: source.txt)")
     parser.add_argument("--algo", type=str, default="MMAS", choices=["MMAS", "DFS"], help="Name of algorithm, you can choose between two method: MMAS(heuristic) and DFS(brute)")
+    
+    parser.add_argument("--iterations", type=int, default=200, help="Number of MMAS iterations (default: 200)")
+    parser.add_argument("--ants", type=int, default=100, help="Number of ants per iteration in MMAS (default: 100)")
+    parser.add_argument("--rho", type=float, default=0.1, help="Pheromone evaporation rate (rho) in MMAS (default: 0.1)")
+    parser.add_argument("--alpha", type=float, default=1.0, help="Pheromone weight (alpha) in MMAS (default=1.0)")
+    parser.add_argument("--beta", type=float, default=1.5, help="Heuristic weight (beta) in MMAS (default=1.5)")
+    
     args = parser.parse_args()
     main(args)
