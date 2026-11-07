@@ -1,5 +1,6 @@
 import argparse
 from DFS import DFS
+from MMAS import MMAS
 
 def load(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -26,9 +27,20 @@ def evaluate(nums, seq):
 
 def main(args):
     nums = load(args.input_path)
-    dfs = DFS(nums)
-    best_length, best_path = dfs.run_without_start_point()
-    glued, glued_for_print = evaluate(nums, best_path)
+
+    if args.algo == "DFS":
+        if len(nums) < 145:
+            dfs = DFS(nums)
+            best_length, best_path = dfs.run()
+            glued, glued_for_print = evaluate(nums, best_path)
+        else:
+            args.algo = "DFS"
+            print("WARNING] DFS is computationally prohibitive for datasets with >= 145 elements")
+
+    if args.algo == "MMAS":
+        aco = MMAS(nums=nums, num_iterations=200, num_ants=100, rho=0.1, alpha=1.0, beta=1.5)
+        best_length, best_path = aco.run()
+        glued, glued_for_print = evaluate(nums, best_path)
 
     print(f"Length    : {best_length}")
     print(f"Formatted chain    : {glued_for_print}")
@@ -36,15 +48,8 @@ def main(args):
     
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Puzzle-quiz using two method (DFS and MMAS modification)")
+    parser = argparse.ArgumentParser(description="Puzzle-quiz using two method (DFS and MMAS-ACO")
     parser.add_argument("--input_path", type=str, default="source.txt", help="Path to source file with puzzles (default: source.txt)")
-    parser.add_argument(
-        "--name_of_algorithm", 
-        type=str, 
-        default="MMAS", 
-        choices=["MMAS", "DFS"],
-        help="Name of algorithm: MMAS - heuristic, DFS - exhaustive chain enumeration (default: MMAS)"
-    )
-
+    parser.add_argument("--algo", type=str, default="MMAS", choices=["MMAS", "DFS"], help="Name of algorithm, you can choose between two method: MMAS(heuristic) and DFS(brute)")
     args = parser.parse_args()
     main(args)
