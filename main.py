@@ -19,7 +19,7 @@ def evaluate(nums, seq):
             raise ValueError("Invalid sequence: string connection does not match")
             # break
 
-        glued_for_print += f"({overlap})" + nums[i][2:]
+        glued_for_print += f"({overlap})" + nums[i][2:4]
         glued += nums[i][2:]
         overlap = nums[i][-2:]
 
