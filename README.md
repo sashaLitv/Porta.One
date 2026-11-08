@@ -54,4 +54,3 @@ Exact solution (DFS): → 67 fragments (absolute maximum, guaranteed optimal pat
 Heuristic solution (MMAS): → 64–67 fragments (typically hits 65–66 consistently on source.txt, with occasional runs reaching the 67 optimum depending on randomness and hyperparameters).
 
 ---
-```
